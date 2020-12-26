@@ -25,9 +25,6 @@ exports.reviewDbcontroller = {
             .then(async result => {
                 if (result) {
                     res.json(result)
-                    let user = await User.findById(req.user_id)
-                    user.books.push(review.book_id);
-                    await user.save()
                 }
                 else {
                     res.status(404).send("Error saving the review");
