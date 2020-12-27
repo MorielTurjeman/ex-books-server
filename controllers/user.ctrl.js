@@ -4,18 +4,27 @@ exports.userDbcontroller = {
     getUsers(req, res) {
         User.find({})
             .then(users => res.json(users))
-            .catch(err => console.log(`Could not get users ${err}`))
+            .catch(err => {
+                res.status(500).json(`Error getting all useres`);
+                console.log(`Error getting all users ${err}`)
+            })
     },
     getUser(req, res) {
         User.findById(req.params.id)
             .then(user => res.json(user))
-            .catch(err => console.log(`Could not get user ${req.params.id}`))
+            .catch(err => {
+                res.status(500).json(`Error gettint user ${req.params.id}`);
+                console.log(`Error getting user ${err}`)
+            })
     },
     createUser(req, res) {
         let u = new User(req.body);
         u.save()
             .then(user => res.json(user))
-            .catch(err => console.log(`Could not create user`))
+            .catch(err => {
+                res.status(500).json(`Error creating new user`);
+                console.log(`Error creating user ${err}`)
+            })
     },
 
     addBookToUser(req, res) {
@@ -32,7 +41,10 @@ exports.userDbcontroller = {
                 }
 
             })
-            .catch(err => console.log(`Could not add book to user ${req.params.id}`));
+            .catch(err => {
+                res.status(500).json(`Error adding book user`);
+                console.log(`Error adding book to user ${err}`)
+            })
     },
 
     addToWishList(req, res) {
@@ -54,9 +66,11 @@ exports.userDbcontroller = {
                 else {
                     res.status(404).send('Error finding user')
                 }
-
             })
-            .catch(err => console.log(`Could not add book to wishlist ${req.params.id}`));
+            .catch(err => {
+                res.status(500).json(`Error adding book to wishlist`);
+                console.log(`Error adding book to wishlist ${err}`)
+            });
     },
     updateUser(req, res) {
         user_id = req.user_id;
@@ -85,7 +99,7 @@ exports.userDbcontroller = {
         User.deleteOne({ id: req.params.id })
             .then(docs => { res.json(docs) })
             .catch(err => {
-                res.status(500).json(`Error updating user`);
+                res.status(500).json(`Error deleting user`);
                 console.log(`Error deleting user ${err}`)
             });
     },
@@ -114,7 +128,7 @@ exports.userDbcontroller = {
         }
 
     },
-    deleteBookFromWishlist(req, res){
+    deleteBookFromWishlist(req, res) {
         user_id = req.user_id;
         if (user_id != req.params.id) {
             res.status(401).send("No permission to delete book from wishlist");
