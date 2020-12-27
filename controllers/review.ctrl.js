@@ -52,7 +52,7 @@ exports.reviewDbcontroller = {
                     res.json(review);
                 }
             })
-            .catch("Error updating review");
+            .catch( err => console.log("Error updating review"));
     },
 
     deleteReview(req, res) {

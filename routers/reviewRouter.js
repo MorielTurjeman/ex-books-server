@@ -1,6 +1,6 @@
 const {Router}= require('express');
 const{reviewDbcontroller}=require('../controllers/review.ctrl');
-const User = require('../models/user');
+
 
 const reviewRouter= new Router;
 
