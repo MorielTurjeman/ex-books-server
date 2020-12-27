@@ -14,7 +14,10 @@ exports.reviewDbcontroller = {
             filter.user_id = req.query.user_id;
         Review.find(filter)
             .then(docs => { res.json(docs) })
-            .catch(err => console.log('Error getting data from db: ${err}'));
+            .catch(err => {
+                res.status(500).json(`Error getting reviews`);
+                console.log(`Error getting reviews ${err}`)
+            })
 
     },
     addReview(req, res) {
@@ -31,7 +34,10 @@ exports.reviewDbcontroller = {
 
                 }
             })
-            .catch(err => console.log(`Error saving the data from db: ${err}`))
+            .catch(err => {
+                res.status(500).json(`Error adding a review`);
+                console.log(`Error adding a review ${err}`)
+            })
 
     },
     updateReview(req, res) {
@@ -52,7 +58,10 @@ exports.reviewDbcontroller = {
                     res.json(review);
                 }
             })
-            .catch( err => console.log("Error updating review"));
+            .catch(err => {
+                res.status(500).json(`Error updating review`);
+                console.log(`Error updating review ${err}`)
+            })
     },
 
     deleteReview(req, res) {
@@ -70,7 +79,10 @@ exports.reviewDbcontroller = {
                     res.json(review);
                 }
             })
-            .catch("Error updating review");
+            .catch(err => {
+                res.status(500).json(`Error deleting review`);
+                console.log(`Error deleting review ${err}`)
+            })
     }
 
 }
