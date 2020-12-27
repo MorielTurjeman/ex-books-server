@@ -81,6 +81,41 @@ exports.userDbcontroller = {
             }
     },
 
+    deleteUser(req, res){
+        User.deleteOne({ id: req.params.id })
+        .then(docs => { res.json(docs) })
+        .catch( err => {
+            res.status(500).json(`Error updating user`);
+            console.log(`Error deleting user ${err}`)
+        });
+    },
+
+    deleteBookToSwap(req, res){
+        user_id = req.user_id;
+        if (user_id != req.params.id) {
+            res.status(401).send("No permission to delete book from user");
+        }
+        else{
+            User.findById(user_id)
+                .then(async user => {
+                    const index= user.books.indexOf(req.params.bookId)
+                    if(index> -1){
+                        user.books.splice(index,1);
+                        await user.save();
+                        res.json(user);
+                }})
+                    .catch( err => {
+                        res.status(500).json(`Error deleting book from user`);
+                        console.log(`Error deleting book from user ${err}`)
+                        
+
+                } )
+        }
+        
+    }
+
+
+
 
 
 }
