@@ -5,6 +5,8 @@ const port = process.env.PORT || 3000;
 
 const { reviewRouter } = require("./routers/reviewRouter");
 const { UserRouter } = require("./routers/userRouter");
+// const {swapRouter}= require("./routers/swapRouter");
+const {bookRouter}= require("./routers/bookRouter");
 
 
 app.use((req, res, next) => {
@@ -27,6 +29,8 @@ app.use(logger("combined"));
 
 app.use("/api/reviews", reviewRouter);
 app.use("/api/users", UserRouter);
+// app.use("/api/swaps",swapRouter);
+app.use("/api/books",bookRouter);
 
 
 app.use((err, req, res, next) => {

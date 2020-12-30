@@ -2,8 +2,8 @@ const {Schema, model, SchemaTypes}=require('mongoose');
 
 const reviewSchema= new Schema({
     user_id:{type: SchemaTypes.ObjectId, ref: "users"},
-    book_id:{type:String},
-    stars:{type:Number},
+    book_id:{type:String, required:true},
+    stars:{type:Number, required:true},
     text:{type:String}
 
 },{collection: 'reviews'});
