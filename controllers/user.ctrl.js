@@ -162,14 +162,17 @@ exports.userDbcontroller = {
             {
                 book = {
                     name: work.title,
-                    cover: `http://covers.openlibrary.org/b/id/${work.covers[0]}-M.jpg`
+                    cover: `http://covers.openlibrary.org/b/id/${work.covers[0]}-M.jpg`,
+                    id: bookId
                 }
             }
             else
             {
                 book = {
                     name: work.title,
-                    cover: 'https://via.placeholder.com/108x107.png'
+                    cover: 'https://via.placeholder.com/108x107.png',
+                    id: bookId
+
                 }
             }
             
