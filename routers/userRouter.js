@@ -10,6 +10,7 @@ userRouter.post('/:id/books', userDbcontroller.addBookToUser);
 userRouter.post('/:id/wishlist', userDbcontroller.addToWishList);
 userRouter.put('/:id', userDbcontroller.updateUser);
 userRouter.delete('/:id',userDbcontroller.deleteUser);
+userRouter.get('/:id/books', userDbcontroller.getUserBooks);
 userRouter.delete('/:id/books/:bookId', userDbcontroller.deleteBookToSwap);
 userRouter.delete('/:id/wishlist/:bookId', userDbcontroller.deleteBookFromWishlist);
 

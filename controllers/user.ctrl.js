@@ -1,3 +1,5 @@
+
+const { default: axios } = require('axios');
 const User = require('../models/user');
 
 exports.userDbcontroller = {
@@ -151,12 +153,37 @@ exports.userDbcontroller = {
                 });
         }
 
+    },
+    getUserBooks(req, res) {
+        let bookIdArrayToObjdet = async function (bookId){
+            let work = (await axios.get(`https://openlibrary.org/works/${bookId}.json`)).data;
+            let book = {};
+            if (work.covers)
+            {
+                book = {
+                    name: work.title,
+                    cover: `http://covers.openlibrary.org/b/id/${work.covers[0]}-S.jpg`
+                }
+            }
+            else
+            {
+                book = {
+                    name: work.title,
+                    cover: 'https://via.placeholder.com/57x58.png'
+                }
+            }
+            
+            
+           return Promise.resolve(book);
+        }
+
+        User.findById(req.params.id).then(async user => {
+            console.log('here');
+            let bookDict= await Promise.all(user.books.map(bookIdArrayToObjdet))
+            console.log('here2');
+            
+            res.json(bookDict);
+
+        })
     }
-
-
-
-
-
-
-
 }
