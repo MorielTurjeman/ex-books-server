@@ -33,7 +33,7 @@ exports.bookDbcontroller = {
 
         User.find({}, 'books').then(async booksArrays => {
             let bookDict= await booksArrays.reduce(bookIdArrayToObjdet, Promise.resolve({}));
-            res.json(bookDict);
+            res.json(Object.values(bookDict));
         })
     }
 }
