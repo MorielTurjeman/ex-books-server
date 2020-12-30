@@ -13,14 +13,14 @@ exports.bookDbcontroller = {
                     {
                         fd[currArray.books[i]] = {
                             name: work.title,
-                            cover: `http://covers.openlibrary.org/b/id/${work.covers[0]}-S.jpg`
+                            cover: `http://covers.openlibrary.org/b/id/${work.covers[0]}-M.jpg`
                         }
                     }
                     else
                     {
                         fd[currArray.books[i]] = {
                             name: work.title,
-                            cover: 'https://via.placeholder.com/57x58.png'
+                            cover: 'https://via.placeholder.com/108x100.png'
                         }
                     }
                 }
