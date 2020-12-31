@@ -34,8 +34,11 @@ exports.userDbcontroller = {
         User.findById(req.params.id)
             .then(async user => {
                 if (user) {
-                    user.books.push(bookId);
-                    await user.save();
+                    if(! (bookId in user.books))
+                    {
+                        user.books.push(bookId);
+                        await user.save();
+                    }
                     res.json(user);
                 }
                 else {
