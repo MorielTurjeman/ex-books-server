@@ -121,8 +121,9 @@ exports.userDbcontroller = {
                     if (index > -1) {
                         user.books.splice(index, 1);
                         await user.save();
-                        res.json(user);
+                        
                     }
+                    res.json(user);
                 })
                 .catch(err => {
                     res.status(500).json(`Error deleting book from user`);
