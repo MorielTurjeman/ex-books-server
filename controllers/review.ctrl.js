@@ -20,6 +20,16 @@ exports.reviewDbcontroller = {
             })
 
     },
+    getReview(req, res){
+        const reviewId= req.params.id;
+        Review.findById(reviewId)
+            .then(review=>res.json(review))
+            .catch(err => {
+                res.status(500).json(`Error get a review`);
+                console.log(`Error get a review ${err}`)
+            })
+
+    },
     addReview(req, res) {
         let review = req.body;
         review.user_id = req.user_id;
