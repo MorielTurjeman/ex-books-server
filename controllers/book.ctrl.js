@@ -6,6 +6,8 @@ exports.bookDbcontroller = {
             let fd = await finalDict
             
             for(let i = 0; i < currArray.books.length; i++){
+                if (!currArray.books[i])
+                    continue;
                 if (!(currArray.books[i] in fd))
                 {
                     let work = (await axios.get(`https://openlibrary.org/works/${currArray.books[i]}.json`)).data;

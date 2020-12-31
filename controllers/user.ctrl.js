@@ -156,6 +156,8 @@ exports.userDbcontroller = {
     },
     getUserBooks(req, res) {
         let bookIdArrayToObjdet = async function (bookId){
+            if (!bookId)
+                return Promise.resolve();
             let work = (await axios.get(`https://openlibrary.org/works/${bookId}.json`)).data;
             let book = {};
             if (work.covers)
@@ -181,9 +183,7 @@ exports.userDbcontroller = {
         }
 
         User.findById(req.params.id).then(async user => {
-            console.log('here');
             let bookDict= await Promise.all(user.books.map(bookIdArrayToObjdet))
-            console.log('here2');
             
             res.json(bookDict);
 
