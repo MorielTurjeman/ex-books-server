@@ -158,6 +158,9 @@ exports.userDbcontroller = {
         }
 
     },
+
+
+    //add category to the functions of type "get"
     getUserBooks(req, res) {
         let bookIdArrayToObjdet = async function (bookId){
             if (!bookId)
@@ -192,5 +195,42 @@ exports.userDbcontroller = {
             res.json(bookDict);
 
         })
+    },
+
+    getWishList(req, res){
+        let bookIdArrayToObjdet = async function (bookId){
+            if (!bookId)
+                return Promise.resolve();
+            let work = (await axios.get(`https://openlibrary.org/works/${bookId}.json`)).data;
+            let book = {};
+            if (work.covers)
+            {
+                book = {
+                    name: work.title,
+                    cover: `http://covers.openlibrary.org/b/id/${work.covers[0]}-M.jpg`,
+                    id: bookId
+                }
+            }
+            else
+            {
+                book = {
+                    name: work.title,
+                    cover: 'https://via.placeholder.com/108x107.png',
+                    id: bookId
+
+                }
+            }
+            
+            
+           return Promise.resolve(book);
+        }
+
+        User.findById(req.params.id).then(async user => {
+            let bookDict= await Promise.all(user.wishlist.map(bookIdArrayToObjdet))
+            
+            res.json(bookDict);
+
+        })
+
     }
 }

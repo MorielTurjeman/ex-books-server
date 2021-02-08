@@ -10,7 +10,8 @@ const userSchema= new Schema({
     },
     phone_num:{type:String, required: true},
     books:{type:[String], required: true, default: []},
-    wishlist:{type:[String] , required: true, default: []}
+    wishlist:{type:[String] , required: true, default: []},
+    password: {type:String, required:true}
 
 },{collation:'users'});
 

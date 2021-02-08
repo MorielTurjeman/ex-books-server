@@ -16,7 +16,8 @@ exports.bookDbcontroller = {
                         fd[currArray.books[i]] = {
                             name: work.title,
                             cover: `http://covers.openlibrary.org/b/id/${work.covers[0]}-M.jpg`,
-                            link: `/book.html?bookId=${currArray.books[i]}`
+                            link: `/book.html?bookId=${currArray.books[i]}`,
+                            subject: work.subject[0] || 'General'
                         }
                     }
                     else
@@ -24,8 +25,8 @@ exports.bookDbcontroller = {
                         fd[currArray.books[i]] = {
                             name: work.title,
                             cover: 'https://via.placeholder.com/108x100.png',
-                            link: `/book.html?bookId=${currArray.books[i]}`
-
+                            link: `/book.html?bookId=${currArray.books[i]}`,
+                            subject: work.subject[0] || 'General'
                         }
                     }
                 }
