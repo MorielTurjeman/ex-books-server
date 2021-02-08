@@ -1,35 +1,58 @@
 const express = require("express");
 const logger = require("morgan");
 const app = express();
-const port = process.env.PORT || 3000;
+const passport= require("passport");
+const cookieParser= require("cookie-parser");
+const session= require("express-session");
+const passportConfig = require('./passportConfig')
+const cors = require('cors');
 
 const { reviewRouter } = require("./routers/reviewRouter");
 const { UserRouter } = require("./routers/userRouter");
-// const {swapRouter}= require("./routers/swapRouter");
+const {swapRouter}= require("./routers/swapRouter");
 const {bookRouter}= require("./routers/bookRouter");
+const {authController} = require("./controllers/AuthController");
+
+const port = process.env.PORT || 4000;
 
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-requested-With, Content-Type, Accept');
-    res.header('Access-Control-Allow-Methods', 'POST, PUT, GET, DELETE, OPTIONS')
-    res.set('Content-Type', 'application/json');
-    next();
-});
 
-app.use((req, res, next) => {
-    //login simulation
-    req.user_id = '5fe7601e77765782e215f29d'
-    next()
-});
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
+//     res.header('Access-Control-Allow-Credentials', 'http://localhost:3001');
+//     res.header('Access-Control-Allow-Headers', 'Origin, X-requested-With, Content-Type, Accept');
+//     res.header('Access-Control-Allow-Methods', 'POST, PUT, GET, DELETE, OPTIONS')
+//     res.set('Content-Type', 'application/json');
+//     next();
+// });
 
+app.use(
+    cors({
+      origin: "http://localhost:3000", // <-- location of the react app were connecting to
+      credentials: true,
+    })
+  );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger("combined"));
+app.use(session({
+    secret:"secretcose",
+    resave: true,
+    saveUninitialized: true
+}))
+app.use(cookieParser("secretcode"));
+app.use(passport.initialize());
+app.use(passport.session());
+passportConfig(passport);
+
+//Routes- move to routes later!!!
+app.post("/login", authController.login);
+app.post("/register",authController.register);
+app.get("/api/users", (req, res)=>{});
 
 app.use("/api/reviews", reviewRouter);
 app.use("/api/users", UserRouter);
-// app.use("/api/swaps",swapRouter);
+app.use("/api/swaps",swapRouter);
 app.use("/api/books",bookRouter);
 
 
