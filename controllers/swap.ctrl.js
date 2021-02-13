@@ -8,7 +8,7 @@ exports.swapDbcontroller = {
             filter.swap_date = req.query.swap_date;
         if ('swap_status' in req.query)
             filter.swap_status = req.query.swap_status;
-        Swap.find({ $and: [{ $or: [{ user_id1: req.user_id1 }, { user_id2: req.user_id }] }, filter] })
+        Swap.find({ $and: [{ $or: [{ user_id1: req.user._id }, { user_id2: req.user._id }] }, filter] })
             .then(docs => { res.json(docs) })
             .catch(err => {
                 res.status(500).json(`Error getting swaps`);
@@ -29,7 +29,7 @@ exports.swapDbcontroller = {
 
     addSwap(req, res) {
         const swap= req.body;
-        swap.user_id1= req.user_id;
+        swap.user_id1= req.user._id;
         const newSwap= new Swap(swap);
         const isBookId1 = User.findById(user_id1).then(user => {
             if (swap.book_id1 in user.books)
@@ -68,7 +68,7 @@ exports.swapDbcontroller = {
     },
 
     updateSwap(req, res){
-        user_id = req.user_id;
+        user_id = req.user._id;
         swap_id=req.params.id;
 
         Swap.findById(swap_id)
@@ -90,7 +90,7 @@ exports.swapDbcontroller = {
     },
 
     deleteSwap(req, res){
-        user_id = req.user_id;
+        user_id = req.user._id;
         swap_id=req.params.id;
 
         Swap.findById(swap_id)

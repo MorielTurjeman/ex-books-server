@@ -48,7 +48,7 @@ passportConfig(passport);
 //Routes- move to routes later!!!
 app.post("/login", authController.login);
 app.post("/register",authController.register);
-app.get("/api/users", (req, res)=>{});
+app.get("/api/current_user", authController.loginGetUser);
 
 app.use("/api/reviews", reviewRouter);
 app.use("/api/users", UserRouter);

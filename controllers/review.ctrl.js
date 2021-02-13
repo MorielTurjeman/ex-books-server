@@ -32,7 +32,7 @@ exports.reviewDbcontroller = {
     },
     addReview(req, res) {
         let review = req.body;
-        review.user_id = req.user_id;
+        review.user_id = req.user._id;
         const newReview = new Review(review);
         const result = newReview.save()
             .then(async result => {
@@ -51,7 +51,7 @@ exports.reviewDbcontroller = {
 
     },
     updateReview(req, res) {
-        user_id = req.user_id;
+        user_id = req.user._id;
         review_id = req.params.id
 
         Review.findById(review_id)
@@ -75,7 +75,7 @@ exports.reviewDbcontroller = {
     },
 
     deleteReview(req, res) {
-        user_id = req.user_id;
+        user_id = req.user._id;
         review_id = req.params.id
 
         Review.findById(review_id)

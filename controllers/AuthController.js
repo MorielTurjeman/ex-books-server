@@ -40,7 +40,7 @@ exports.authController={
             console.log(user)
             if (err) throw err;
             if(!user){
-                res.send("No User exist");
+                res.status(403).send("No User exist");
             }
             else{
                 req.login(user, err =>{
@@ -56,7 +56,10 @@ exports.authController={
     },
 
     loginGetUser(req, res){
-        res.send(req.user); //the req.user stores the entire uern that has been authenticated inside of it.
+        if (req.user)
+            res.json({_id: req.user._id, first_name: req.user.first_name, last_name: req.user.last_name}); //the req.user stores the entire uern that has been authenticated inside of it.
+        else
+            res.json({})
     }
 
 }

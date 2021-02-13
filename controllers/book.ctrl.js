@@ -2,42 +2,28 @@ const User = require("../models/user")
 const axios= require("axios").default;
 exports.bookDbcontroller = {
     getAllBooks(req, res) {
-        let bookIdArrayToObjdet = async function (finalDict, currArray){
-            let fd = await finalDict
+        User.find({}, 'books').then(booksArrays => {
+            let books = [];
+            for (let book of booksArrays)
+                books = books.concat(book.books)
             
-            for(let i = 0; i < currArray.books.length; i++){
-                if (!currArray.books[i])
-                    continue;
-                if (!(currArray.books[i] in fd))
-                {
-                    let work = (await axios.get(`https://openlibrary.org/works/${currArray.books[i]}.json`)).data;
-                    if (work.covers)
-                    {
-                        fd[currArray.books[i]] = {
-                            name: work.title,
-                            cover: `http://covers.openlibrary.org/b/id/${work.covers[0]}-M.jpg`,
-                            link: `/book.html?bookId=${currArray.books[i]}`,
-                            subject: work.subject[0] || 'General'
-                        }
-                    }
-                    else
-                    {
-                        fd[currArray.books[i]] = {
-                            name: work.title,
-                            cover: 'https://via.placeholder.com/108x100.png',
-                            link: `/book.html?bookId=${currArray.books[i]}`,
-                            subject: work.subject[0] || 'General'
-                        }
-                    }
-                }
-            }
-           return Promise.resolve(fd);
-        }
-
-        User.find({}, 'books').then(async booksArrays => {
-            let bookDict= await booksArrays.reduce(bookIdArrayToObjdet, Promise.resolve({}));
-            res.json(Object.values(bookDict));
+            return uniqBooks = (a => [...new Set(a)])(books);
         })
+        .then(booksIds => {
+            return Promise.all(booksIds.map(bookId => axios.get(`https://openlibrary.org/works/${bookId}.json`)))
+        })
+        .then(bookRequests => {
+            return bookRequests.map(r => r.data)
+        })
+        .then(booksData => {
+            return booksData.map(book => {return {
+                name: book.title,
+                cover: book.covers ? book.covers[0] : null,
+                id: book.key.split('/')[2],
+                subject: book.subjects ? book.subjects[0] : 'General'
+            }})
+        })
+        .then(books => res.json(books))
     }
 }
 

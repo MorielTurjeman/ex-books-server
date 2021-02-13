@@ -54,6 +54,7 @@ exports.userDbcontroller = {
 
     addToWishList(req, res) {
         let bookId = req.body.id;
+        console.log(req.params);
         User.findById(req.params.id)
             .then(async user => {
                 if (user) {
@@ -78,7 +79,7 @@ exports.userDbcontroller = {
             });
     },
     updateUser(req, res) {
-        user_id = req.user_id;
+        user_id = req.user._id;
         if (user_id != req.params.id) {
             res.status(401).send("No permission to update user");
         }
@@ -110,7 +111,7 @@ exports.userDbcontroller = {
     },
 
     deleteBookToSwap(req, res) {
-        user_id = req.user_id;
+        user_id = req.user._id;
         if (user_id != req.params.id) {
             res.status(401).send("No permission to delete book from user");
         }
@@ -135,7 +136,7 @@ exports.userDbcontroller = {
 
     },
     deleteBookFromWishlist(req, res) {
-        user_id = req.user_id;
+        user_id = req.user._id;
         if (user_id != req.params.id) {
             res.status(401).send("No permission to delete book from wishlist");
         }
