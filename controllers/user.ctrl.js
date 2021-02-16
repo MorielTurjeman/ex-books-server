@@ -34,7 +34,7 @@ exports.userDbcontroller = {
         User.findById(req.params.id)
             .then(async user => {
                 if (user) {
-                    if(! (bookId in user.books))
+                    if(!(user.books.includes(bookId)))
                     {
                         user.books.push(bookId);
                         await user.save();
@@ -58,7 +58,7 @@ exports.userDbcontroller = {
         User.findById(req.params.id)
             .then(async user => {
                 if (user) {
-                    if (!(bookId in user.wishlist)) {
+                    if (!(user.wishlist.includes(bookId))) {
                         user.wishlist.push(bookId);
                         await user.save();
                         res.json(user);
@@ -137,6 +137,7 @@ exports.userDbcontroller = {
     },
     deleteBookFromWishlist(req, res) {
         user_id = req.user._id;
+        // cpmsp;e
         if (user_id != req.params.id) {
             res.status(401).send("No permission to delete book from wishlist");
         }

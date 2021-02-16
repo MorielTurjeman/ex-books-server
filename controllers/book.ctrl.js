@@ -24,6 +24,13 @@ exports.bookDbcontroller = {
             }})
         })
         .then(books => res.json(books))
+    },
+    getBookCities(req, res) {
+        const bookId = req.params.id;
+        console.log(req.params.id)
+        User.find({ books : { $in : [bookId] }})
+        .then(users => users.map(u => u.address.city))
+        .then(cities => res.json(cities));
     }
 }
 
