@@ -163,75 +163,42 @@ exports.userDbcontroller = {
 
     //add category to the functions of type "get"
     getUserBooks(req, res) {
-        let bookIdArrayToObjdet = async function (bookId){
-            if (!bookId)
-                return Promise.resolve();
-            let work = (await axios.get(`https://openlibrary.org/works/${bookId}.json`)).data;
-            let book = {};
-            if (work.covers)
-            {
-                book = {
-                    name: work.title,
-                    cover: `http://covers.openlibrary.org/b/id/${work.covers[0]}-M.jpg`,
-                    id: bookId
-                }
-            }
-            else
-            {
-                book = {
-                    name: work.title,
-                    cover: 'https://via.placeholder.com/108x107.png',
-                    id: bookId
+        User.findById(req.params.id)
+            .then(user => user.books)
+            .then(bookIds => {
+                return Promise.all(bookIds.map(bookId => axios.get(`https://openlibrary.org/works/${bookId}.json`)))
+            })
+            .then(responseArray => responseArray.map(res => res.data))
+            .then(books => {
+                return books.map(book => {
+                    return {
+                        name: book.title,
+                        cover: book.covers ? book.covers[0] : null,
+                        id: book.key.split('/')[2],
+                        subject: book.subjects ? book.subjects[0] : 'General'
+                    }})
+            })
+            .then(books => res.json(books))
 
-                }
-            }
-            
-            
-           return Promise.resolve(book);
-        }
-
-        User.findById(req.params.id).then(async user => {
-            let bookDict= await Promise.all(user.books.map(bookIdArrayToObjdet))
-            
-            res.json(bookDict);
-
-        })
     },
 
     getWishList(req, res){
-        let bookIdArrayToObjdet = async function (bookId){
-            if (!bookId)
-                return Promise.resolve();
-            let work = (await axios.get(`https://openlibrary.org/works/${bookId}.json`)).data;
-            let book = {};
-            if (work.covers)
-            {
-                book = {
-                    name: work.title,
-                    cover: `http://covers.openlibrary.org/b/id/${work.covers[0]}-M.jpg`,
-                    id: bookId
-                }
-            }
-            else
-            {
-                book = {
-                    name: work.title,
-                    cover: 'https://via.placeholder.com/108x107.png',
-                    id: bookId
-
-                }
-            }
-            
-            
-           return Promise.resolve(book);
-        }
-
-        User.findById(req.params.id).then(async user => {
-            let bookDict= await Promise.all(user.wishlist.map(bookIdArrayToObjdet))
-            
-            res.json(bookDict);
-
-        })
+        User.findById(req.params.id)
+            .then(user => user.wishlist)
+            .then(wishlist => {
+                return Promise.all(wishlist.map(bookId => axios.get(`https://openlibrary.org/works/${bookId}.json`)))
+            })
+            .then(responseArray => responseArray.map(res => res.data))
+            .then(wishlistBooks => {
+                return wishlistBooks.map(book => {
+                    return {
+                        name: book.title,
+                        cover: book.covers ? book.covers[0] : null,
+                        id: book.key.split('/')[2],
+                        subject: book.subjects ? book.subjects[0] : 'General'
+                    }})
+            })
+            .then(wishlist => res.json(wishlist))
 
     }
 }
