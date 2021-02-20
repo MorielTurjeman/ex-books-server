@@ -1,13 +1,14 @@
-const {Schema, model, SchemaTypes}=require('mongoose');
+const {Schema, model, SchemaTypes} = require('mongoose');
 
 const reviewSchema= new Schema({
     user_id:{type: SchemaTypes.ObjectId, ref: "users"},
     book_id:{type:String, required:true},
     stars:{type:Number, required:true},
+    name:{type: String, required: true},
     text:{type:String}
 
 },{collection: 'reviews'});
 
-const Review=model('Review', reviewSchema);
+const Review = model('Review', reviewSchema);
 
-module.exports=Review;
+module.exports = Review;

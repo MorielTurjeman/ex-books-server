@@ -1,8 +1,6 @@
-const { SchemaTypes, SchemaType } = require("mongoose");
-const { update } = require("../models/review");
+const { SchemaTypes } = require("mongoose");
 const Review = require("../models/review");
-const User = require("../models/user");
-const ObjectID = require('mongodb').ObjectID
+
 
 
 exports.reviewDbcontroller = {
@@ -21,7 +19,7 @@ exports.reviewDbcontroller = {
 
     },
     getReview(req, res){
-        const reviewId= req.params.id;
+        const reviewId = req.params.id;
         Review.findById(reviewId)
             .then(review=>res.json(review))
             .catch(err => {
@@ -31,8 +29,9 @@ exports.reviewDbcontroller = {
 
     },
     addReview(req, res) {
-        let review = req.body;
-        review.user_id = req.user._id;
+        const { review } = req.body;
+        review.user_id = req.user_id;
+        console.log(review);
         const newReview = new Review(review);
         const result = newReview.save()
             .then(async result => {
@@ -51,9 +50,9 @@ exports.reviewDbcontroller = {
 
     },
     updateReview(req, res) {
-        user_id = req.user._id;
-        review_id = req.params.id
-
+        const user_id = req.user_id;
+        const review_id = req.params.id
+        console.log(review_id)
         Review.findById(review_id)
             .then(async review => {
                 if (review.user_id != user_id) {
@@ -62,7 +61,7 @@ exports.reviewDbcontroller = {
                 else {
                     review.text = req.body.text;
                     review.stars = req.body.stars;
-
+                    review.name = req.body.name
                     await review.save();
 
                     res.json(review);
@@ -75,8 +74,8 @@ exports.reviewDbcontroller = {
     },
 
     deleteReview(req, res) {
-        user_id = req.user._id;
-        review_id = req.params.id
+        const user_id = req.user_id;
+        const review_id = req.params.id
 
         Review.findById(review_id)
             .then(async review => {
