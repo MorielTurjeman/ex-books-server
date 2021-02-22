@@ -23,7 +23,8 @@ exports.authController={
                             street:req.body.address.street
                         },
                         phone_num:req.body.phone_num,
-                        password:hashPassword 
+                        password:hashPassword,
+                        age: req.body.age
                     })
                     await newUser.save();
                     res.send("User created");
@@ -54,12 +55,15 @@ exports.authController={
         })(req, res, next);
             
     },
-
     loginGetUser(req, res){
         if (req.user)
             res.json({_id: req.user._id, first_name: req.user.first_name, last_name: req.user.last_name}); //the req.user stores the entire uern that has been authenticated inside of it.
         else
             res.json({})
+    },
+    logout(req, res) {
+        req.logout()
+        res.json();
     }
 
 }

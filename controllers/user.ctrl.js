@@ -31,6 +31,8 @@ exports.userDbcontroller = {
 
     addBookToUser(req, res) {
         let bookId = req.body.id;
+        if (!bookId)
+            res.status(400).json();
         User.findById(req.params.id)
             .then(async user => {
                 if (user) {
@@ -54,6 +56,8 @@ exports.userDbcontroller = {
 
     addToWishList(req, res) {
         let bookId = req.body.id;
+        if (!bookId)
+            res.status(400).json();
         console.log(req.params);
         User.findById(req.params.id)
             .then(async user => {

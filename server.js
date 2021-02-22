@@ -49,6 +49,7 @@ passportConfig(passport);
 app.post("/login", authController.login);
 app.post("/register",authController.register);
 app.get("/api/current_user", authController.loginGetUser);
+app.get("/logout", authController.logout);
 
 app.use("/api/reviews", reviewRouter);
 app.use("/api/users", UserRouter);

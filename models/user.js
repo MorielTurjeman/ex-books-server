@@ -6,13 +6,13 @@ const userSchema= new Schema({
     email: {type: String, required:true},
     address:{
         city:{type:String, required:true},
-        street:{type:String, required: true}
+        street:{type:String, required: false}
     },
-    phone_num:{type:String, required: true},
+    phone_num:{type:String, required: false},
     books:{type:[String], required: true, default: []},
     wishlist:{type:[String] , required: true, default: []},
-    password: {type:String, required:true}
-
+    password: {type:String, required:true},
+    age: { type:Number, required: true }
 },{collation:'users'});
 
 const User= model('User', userSchema);
