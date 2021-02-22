@@ -38,16 +38,15 @@ exports.authController={
     login(req, res, next){
         
         passport.authenticate("local", (err, user, info) =>{
-            console.log(user)
             if (err) throw err;
             if(!user){
                 res.status(403).send("No User exist");
             }
             else{
                 req.login(user, err =>{
+                    res.cookie("userInfo", JSON.stringify({first_name: user.first_name, age: user.age}), {maxAge: 90000, httpOnly:true})
                     if(err) throw err;
                     res.send('Successfully Authenticated');
-                    console.log(req.user);
                 })
                
                 
@@ -57,7 +56,7 @@ exports.authController={
     },
     loginGetUser(req, res){
         if (req.user)
-            res.json({_id: req.user._id, first_name: req.user.first_name, last_name: req.user.last_name}); //the req.user stores the entire uern that has been authenticated inside of it.
+            res.json({_id: req.user._id, first_name: req.user.first_name, last_name: req.user.last_name, age: req.user.age}); //the req.user stores the entire uern that has been authenticated inside of it.
         else
             res.json({})
     },
