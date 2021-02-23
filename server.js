@@ -28,7 +28,7 @@ const port = process.env.PORT || 4000;
 
 app.use(
     cors({
-      origin: "exbooks.netlify.app", // <-- location of the react app were connecting to
+      origin: "https://exbooks.netlify.app", // <-- location of the react app were connecting to
       credentials: true,
     })
   );
