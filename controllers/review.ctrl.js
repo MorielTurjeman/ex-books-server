@@ -51,11 +51,10 @@ exports.reviewDbcontroller = {
     updateReview(req, res) {
         const user_id = req.user._id;
         const review_id = req.params.id
-        console.log(review_id)
-        Review.findById(review_id)
+        Review.findOne({_id: review_id, user_id: user_id})
             .then(async review => {
                 console.log(review);
-                if (review.user_id != user_id) {
+                if (!review) {
                     res.status(403).send("No permission to update review");
                 }
                 else {
