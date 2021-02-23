@@ -76,9 +76,9 @@ exports.reviewDbcontroller = {
         const user_id = req.user_id;
         const review_id = req.params.id
 
-        Review.findById(review_id)
+        Review.findOne({_id: review_id, user_id: user_id})
             .then(async review => {
-                if (review.user_id != user_id) {
+                if (review) {
                     res.status(403).send("No permission to delete review");
                 }
                 else {
