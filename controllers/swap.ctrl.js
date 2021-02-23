@@ -65,6 +65,7 @@ exports.swapDbcontroller = {
 
         Promise.all([isBookId1, isBookId2])
         .then(([book1_valid, book2_valid]) => {
+            console.log([book1_valid, book2_valid])
             if (book1_valid && book2_valid)
             {
                 return newSwap.save()        
