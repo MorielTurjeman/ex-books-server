@@ -30,8 +30,7 @@ exports.reviewDbcontroller = {
     },
     addReview(req, res) {
         const { review } = req.body;
-        review.user_id = req.user_id;
-        console.log(review);
+        review.user_id = req.user._id;
         const newReview = new Review(review);
         const result = newReview.save()
             .then(async result => {
