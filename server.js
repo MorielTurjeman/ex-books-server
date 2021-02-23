@@ -12,6 +12,7 @@ const { UserRouter } = require("./routers/userRouter");
 const {swapRouter}= require("./routers/swapRouter");
 const {bookRouter}= require("./routers/bookRouter");
 const {authController} = require("./controllers/AuthController");
+const { Mongoose } = require("mongoose");
 
 const port = process.env.PORT || 4000;
 
@@ -32,14 +33,23 @@ app.use(
       credentials: true,
     })
   );
+  
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger("combined"));
-app.use(session({
-    secret:"secretcose",
+app.use(
+  session({
+    secret: 'cookiemonster',
     resave: true,
-    saveUninitialized: true
-}))
+    saveUninitialized: false,
+    store: new CookieStore({ mongooseConnection: Mongoose.connection }),
+    cookie: {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    },
+  })
+);
 app.use(cookieParser("secretcode"));
 app.use(passport.initialize());
 app.use(passport.session());
