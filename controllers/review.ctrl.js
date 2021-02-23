@@ -54,6 +54,7 @@ exports.reviewDbcontroller = {
         console.log(review_id)
         Review.findById(review_id)
             .then(async review => {
+                console.log(review);
                 if (review.user_id != user_id) {
                     res.status(403).send("No permission to update review");
                 }
