@@ -12,8 +12,9 @@ const { UserRouter } = require("./routers/userRouter");
 const {swapRouter}= require("./routers/swapRouter");
 const {bookRouter}= require("./routers/bookRouter");
 const {authController} = require("./controllers/AuthController");
-const { Mongoose } = require("mongoose");
 
+const MongoStore = require("connect-mongodb-session")(session)
+const mongoose = require('mongoose')
 const port = process.env.PORT || 4000;
 
 
@@ -33,16 +34,22 @@ app.use(
       credentials: true,
     })
   );
-  
+
+var store = new MongoStore({
+  uri: `${process.env.DB_FULL}`,
+  collection: 'sessions'
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger("combined"));
+app.set('trust proxy', 1)
 app.use(
   session({
     secret: 'cookiemonster',
     resave: true,
     saveUninitialized: false,
-    store: new CookieStore({ mongooseConnection: Mongoose.connection }),
+    store: store,
     cookie: {
       httpOnly: true,
       secure: true,
