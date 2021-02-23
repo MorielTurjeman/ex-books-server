@@ -26,11 +26,9 @@ exports.bookDbcontroller = {
         .then(books => res.json(books))
     },
     getBookCities(req, res) {
-        console.log(req.user)
         const bookId = req.params.id;
+        
         let filter = {} 
-        //if im over 18 > 18 then filter out users under 18
-        //if im less than 18, then filter users over 18, and limit city to my city
         if (req.user.age > 18)
             filter.age = { $gt: 18 }
         else
@@ -38,9 +36,19 @@ exports.bookDbcontroller = {
             filter.age = { $lte: 18 }
             filter.address.city = req.user.address.city;
         }
-        User.find({ books : { $in : [bookId] }, ...filter})
-        .then(users => users.map(u => ({city: u.address.city, _id: u._id, first_name: u.first_name, age: u.age})))
-        .then(cities => res.json(cities));
-    }
+        if (req.query.src == 'wishlist')
+        {
+            User.find({ wishlist : { $in : [bookId] }, _id: { $ne: req.user._id}, ...filter})
+            .then(users => users.map(u => ({city: u.address.city, _id: u._id, first_name: u.first_name, age: u.age})))
+            .then(cities => res.json(cities));
+        }
+        else
+        {
+            User.find({ books : { $in : [bookId] }, ...filter})
+            .then(users => users.map(u => ({city: u.address.city, _id: u._id, first_name: u.first_name, age: u.age})))
+            .then(cities => res.json(cities));
+        }
+    },
+
 }
 

@@ -61,6 +61,8 @@ exports.swapDbcontroller = {
                 return false;
         })
 
+        console.log(newSwap)
+
         Promise.all([isBookId1, isBookId2])
         .then(([book1_valid, book2_valid]) => {
             if (book1_valid && book2_valid)
@@ -96,13 +98,29 @@ exports.swapDbcontroller = {
                     swap.book_id1 = req.body.book_id1;
                     swap.book_id2 = req.body.book_id2;
                     await swap.save();
+
+                    if (swap.swap_status == 'Approved')
+                    {
+                        const u1 = User.findOneAndUpdate({_id: swap.user_id1}, { $pull: {"books": swap.book_id1}});
+                        const u2 = User.findOneAndUpdate({_id: swap.user_id2}, { $pull: {"books": swap.book_id2}});
+
+                        await Promise.all([u1, u2]);
+
+                        const u3 = User.findOneAndUpdate({_id: swap.user_id1}, { $push: {"books": swap.book_id2}});
+                        const u4 = User.findOneAndUpdate({_id: swap.user_id2}, { $push: {"books": swap.book_id1}});
+
+                        await Promise.all([u3, u4]);
+
+                        
+                    }
+
                     res.json(swap);
                 }   
             })
-            .catch(err => {
-                res.status(500).json(`Error updating swap status`);
-                console.log(`Error updating swap status${err}`)
-            })
+            // .catch(err => {
+            //     res.status(500).json(`Error updating swap status`);
+            //     console.log(`Error updating swap status${err}`)
+            // })
 
     },
 
