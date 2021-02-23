@@ -44,7 +44,8 @@ exports.bookDbcontroller = {
         }
         else
         {
-            User.find({ books : { $in : [bookId] }, ...filter})
+            console.log(filter);
+            User.find({ books : { $in : [bookId] }, _id: { $ne: req.user._id}, ...filter})
             .then(users => users.map(u => ({city: u.address.city, _id: u._id, first_name: u.first_name, age: u.age})))
             .then(cities => res.json(cities));
         }
