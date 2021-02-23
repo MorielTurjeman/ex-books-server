@@ -73,12 +73,12 @@ exports.reviewDbcontroller = {
     },
 
     deleteReview(req, res) {
-        const user_id = req.user_id;
+        const user_id = req.user._id;
         const review_id = req.params.id
 
         Review.findOne({_id: review_id, user_id: user_id})
             .then(async review => {
-                if (review) {
+                if (!review) {
                     res.status(403).send("No permission to delete review");
                 }
                 else {
