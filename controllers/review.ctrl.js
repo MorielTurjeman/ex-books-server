@@ -49,7 +49,7 @@ exports.reviewDbcontroller = {
 
     },
     updateReview(req, res) {
-        const user_id = req.user_id;
+        const user_id = req.user._id;
         const review_id = req.params.id
         console.log(review_id)
         Review.findById(review_id)
