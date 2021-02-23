@@ -34,7 +34,7 @@ exports.bookDbcontroller = {
         else
         {
             filter.age = { $lte: 18 }
-            filter.address.city = req.user.address.city;
+            filter.address = {city: req.user.address.city};
         }
         if (req.query.src == 'wishlist')
         {
